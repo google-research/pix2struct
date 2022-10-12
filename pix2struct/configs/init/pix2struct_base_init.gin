@@ -1,2 +1,0 @@
-INITIAL_CHECKPOINT_PATH = 'gs://pix2struct-data/pix2struct_base'
-INIT_STEPS = 280000

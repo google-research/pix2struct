@@ -1,7 +1,0 @@
-from __gin__ import dynamic_registration
-from t5x import utils
-
-INITIAL_CHECKPOINT_PATH = None
-INIT_STEPS = 0
-utils.CheckpointConfig:
-  restore = None

@@ -1,0 +1,39 @@
+[project]
+name = "pix2struct"
+description = ""
+readme = "README.md"
+requires-python = ">=3.7"
+license = {file = "LICENSE"}
+authors = [{name = "pix2struct authors", email="pix2struct@google.com"}]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: Apache Software License",
+    "Intended Audience :: Science/Research",
+]
+keywords = []
+
+# pip dependencies of the project
+dependencies = []
+
+# This is set automatically by flit using `pix2struct.__version__`
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://github.com/google-research/pix2struct"
+repository = "https://github.com/google-research/pix2struct"
+# Other: `documentation`, `changelog`
+
+[project.optional-dependencies]
+# Development deps (unittest, linting, formating,...)
+# Installed through `pip install .[dev]`
+dev = [
+    "pytest",
+    "pytest-xdist",
+    "pylint>=2.6.0",
+    "yapf",
+]
+
+[build-system]
+requires = ["flit_core >=3.5,<4"]
+build-backend = "flit_core.buildapi"

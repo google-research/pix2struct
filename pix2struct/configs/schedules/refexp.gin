@@ -1,5 +1,0 @@
-EVALUATOR_NUM_EXAMPLES = None
-STAGE_STEPS = 10000
-CHECKPOINT_PERIOD = 200
-EVAL_PERIOD = 200
-METRIC_NAME = 'inference_eval/refexp_infer/eval/group_accuracy'

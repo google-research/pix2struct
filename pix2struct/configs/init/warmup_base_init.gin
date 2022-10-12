@@ -1,2 +1,0 @@
-INITIAL_CHECKPOINT_PATH = 'gs://pix2struct-data/warmup_base'
-INIT_STEPS = 30000
