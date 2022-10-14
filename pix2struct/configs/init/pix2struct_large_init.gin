@@ -1,0 +1,2 @@
+INITIAL_CHECKPOINT_PATH = 'gs://pix2struct-data/pix2struct_large'
+INIT_STEPS = 180000

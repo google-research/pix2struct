@@ -1,0 +1,21 @@
+from __gin__ import dynamic_registration
+
+from t5x import adafactor
+from t5x import trainer
+from t5x import utils
+import optax
+from pix2struct import transfer_utils
+
+OPTIMIZER = @adafactor.Adafactor()
+
+adafactor.Adafactor:
+  weight_decay_rate = 1e-5
+
+transfer_utils.transfer_warmup_cosine_decay_schedule:
+  start_step = %INIT_STEPS
+  peak_value = 1e-2
+  warmup_steps = 1000
+  end_step = %TRAIN_STEPS
+
+trainer.Trainer:
+  learning_rate_fn = @transfer_utils.transfer_warmup_cosine_decay_schedule()
