@@ -18,6 +18,7 @@ dependencies = [
     "gin-config",
     "t5x @ git+https://github.com/google-research/t5x",
     "flaxformer @ git+https://github.com/google/flaxformer",
+    "pycocoevalcap",
 ]
 
 # This is set automatically by flit using `pix2struct.__version__`
