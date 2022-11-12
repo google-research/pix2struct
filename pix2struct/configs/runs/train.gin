@@ -1,0 +1,53 @@
+from __gin__ import dynamic_registration
+import __main__ as train_script
+from t5x import checkpoints
+from t5x import utils
+import pix2struct.tasks
+from pix2struct import transfer_utils
+
+include 't5x/configs/runs/finetune.gin'
+
+CHECKPOINT_PERIOD = %gin.REQUIRED
+EVAL_PERIOD =  %gin.REQUIRED
+EVALUATOR_NUM_EXAMPLES = %gin.REQUIRED
+STAGE_STEPS = %gin.REQUIRED
+METRIC_NAME = %gin.REQUIRED
+
+DROPOUT_RATE = 0.0
+USE_CACHED_TASKS = False
+
+train_script.train:
+  eval_period = %EVAL_PERIOD
+
+train/utils.DatasetConfig:
+  pack = False
+
+train_eval/utils.DatasetConfig:
+  pack = False
+
+infer_eval/utils.DatasetConfig:
+  task_feature_lengths = %TASK_FEATURE_LENGTHS
+
+utils.CheckpointConfig:
+  restore = @transfer_utils.TransferRestoreCheckpointConfig()
+
+transfer_utils.TransferRestoreCheckpointConfig:
+  path = %INITIAL_CHECKPOINT_PATH
+  mode = 'specific'
+  dtype = 'float32'
+  steps = %INIT_STEPS
+
+compute_train_steps/transfer_utils.add:
+  b = %INIT_STEPS
+  a = %STAGE_STEPS
+TRAIN_STEPS = @compute_train_steps/transfer_utils.add()
+
+utils.SaveCheckpointConfig:
+  period = %CHECKPOINT_PERIOD
+  keep = 1
+  save_dataset = False
+  checkpointer_cls = @checkpoints.SaveBestCheckpointer
+
+checkpoints.SaveBestCheckpointer:
+  metric_name_to_monitor = %METRIC_NAME
+  metric_mode = 'max'

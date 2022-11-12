@@ -1,0 +1,5 @@
+EVALUATOR_NUM_EXAMPLES = None
+STAGE_STEPS = 5000
+CHECKPOINT_PERIOD = 200
+EVAL_PERIOD = 200
+METRIC_NAME = 'inference_eval/ai2d/eval/exact_match'

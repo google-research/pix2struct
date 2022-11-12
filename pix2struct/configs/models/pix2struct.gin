@@ -1,0 +1,65 @@
+from __gin__ import dynamic_registration
+
+import seqio
+from t5x import adafactor
+from t5x import utils
+from pix2struct import models
+from flaxformer.architectures.t5 import t5_architecture
+from flaxformer.components import dense
+from flaxformer.components import embedding
+from flaxformer.components import layer_norm
+
+include 'pix2struct/configs/models/t5_1_1_flaxformer.gin'
+
+NUM_EMBEDDINGS = 50244
+ACTIVATION_PARTITIONING_DIMS = None
+OPTIMIZER = None
+
+seqio.PassThroughVocabulary:
+  size = 0
+
+embedding.PositionEmbed:
+  num_embeddings = 4096
+  features = %EMBED_DIM
+  dtype = %ACTIVATION_DTYPE
+
+patch_projection/dense.DenseGeneral:
+  features = %EMBED_DIM
+  use_bias = True
+  dtype = %ACTIVATION_DTYPE
+  kernel_axis_names = ['embed', 'mlp']
+  name = 'patch_projection'
+
+models.PatchEmbed:
+  num_extra_embedders = 2  # rows and columns
+  patch_projection_factory = @patch_projection/dense.DenseGeneral
+  embedder_factory = @embedding.PositionEmbed
+
+models.ImageEncoder:
+  num_layers = %NUM_ENCODER_LAYERS
+  layer_factory = @t5_architecture.EncoderLayer
+  input_dropout_factory = %DROPOUT_FACTORY
+  output_dropout_factory = %DROPOUT_FACTORY
+  layer_norm_factory = @layer_norm.T5LayerNorm
+  token_embedder_factory = @models.PatchEmbed
+  shared_relative_position_bias_factory = None
+  dtype = %ACTIVATION_DTYPE
+
+t5_architecture.Decoder:
+  token_embedder_factory = @embedding.Embed
+
+models.ImageEncoderTextDecoder:
+  encoder_factory = @models.ImageEncoder
+  decoder_factory = @t5_architecture.Decoder
+  dtype = %ACTIVATION_DTYPE
+
+seqio.SentencePieceVocabulary:
+  sentencepiece_model_file = "gs://pix2struct-data/sentencepiece.model"
+
+MODEL = @models.ImageToTextModel()
+models.ImageToTextModel:
+  module = @models.ImageEncoderTextDecoder()
+  input_vocabulary = @seqio.PassThroughVocabulary()
+  output_vocabulary = @seqio.SentencePieceVocabulary()
+  optimizer_def = %OPTIMIZER
+  z_loss = 0.0001
