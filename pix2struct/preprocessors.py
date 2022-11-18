@@ -50,10 +50,12 @@ def normalize_image(key: str) -> FeaturesMapping:
       map_fn=tf.image.per_image_standardization)
 
 
-def sample_one(key: str) -> FeaturesMapping:
+def sample_one(key: str, shuffle_fn=None) -> FeaturesMapping:
+  # allows for a stateless shuffle function
+  shuffle_fn = shuffle_fn or tf.random.shuffle
   return map_feature(
       key=key,
-      map_fn=lambda v: tf.random.shuffle(v)[0])
+      map_fn=lambda v: shuffle_fn(v)[0])
 
 
 def patch_sequence(
