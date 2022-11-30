@@ -12,8 +12,8 @@ from flaxformer.components import layer_norm
 include 'pix2struct/configs/models/t5_1_1_flaxformer.gin'
 
 NUM_EMBEDDINGS = 50244
-OPTIMIZER = %gin.REQUIRED
 ACTIVATION_PARTITIONING_DIMS = None
+OPTIMIZER = None
 
 seqio.PassThroughVocabulary:
   size = 0

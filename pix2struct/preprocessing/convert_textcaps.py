@@ -29,7 +29,7 @@ import tensorflow as tf
 
 flags.DEFINE_string("textcaps_dir", None, "Train captions path.")
 
-flags.DEFINE_string("output_dir", None, "Output path")
+flags.DEFINE_string("output_dir", None, "Output path.")
 
 
 class ConvertDataForSplit(beam.PTransform):

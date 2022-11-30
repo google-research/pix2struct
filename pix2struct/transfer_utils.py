@@ -28,6 +28,7 @@ class TransferRestoreCheckpointConfig(utils.RestoreCheckpointConfig):
   steps: Optional[int] = None
 
   def __post_init__(self):
+    super().__post_init__()
     if self.steps is not None:
       assert self.mode == "specific"
       self.path = os.path.join(self.path, f"checkpoint_{self.steps}")

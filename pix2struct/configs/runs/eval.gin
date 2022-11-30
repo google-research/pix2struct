@@ -1,0 +1,13 @@
+from __gin__ import dynamic_registration
+from t5x import utils
+import pix2struct.tasks
+
+include 't5x/configs/runs/eval.gin'
+
+USE_CACHED_TASKS = False
+EVAL_SPLIT = 'validation'
+
+utils.DatasetConfig:
+  split = %EVAL_SPLIT
+  batch_size = %BATCH_SIZE
+  use_memory_cache = False

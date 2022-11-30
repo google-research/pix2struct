@@ -24,7 +24,9 @@ from t5x import utils
 
 class ModelsTest(absltest.TestCase):
 
-  def test_image_encoder_text_decoder(self):
+  def setUp(self):
+    super().setUp()
+
     gin.clear_config()
     gin.add_config_file_search_path("pix2struct/configs")
     gin.parse_config_file("models/pix2struct.gin")
@@ -39,41 +41,44 @@ class ModelsTest(absltest.TestCase):
       models.ImageToTextModel.output_vocabulary = @seqio.PassThroughVocabulary()
     """)
     gin.finalize()
-    model = gin.query_parameter("%MODEL").scoped_configurable_fn()
+    self.model = gin.query_parameter("%MODEL").scoped_configurable_fn()
 
-    input_data = {
-        "encoder_input_tokens": np.ones(shape=(2, 4, 5), dtype=np.float32),
-        "decoder_input_tokens": np.ones(shape=(2, 3), dtype=np.int32),
-        "decoder_target_tokens": np.ones(shape=(2, 3), dtype=np.int32)
+    self.input_data = {
+        "encoder_input_tokens": np.ones(shape=(8, 4, 5), dtype=np.float32),
+        "decoder_input_tokens": np.ones(shape=(8, 3), dtype=np.int32),
+        "decoder_target_tokens": np.ones(shape=(8, 3), dtype=np.int32)
     }
-    partitioner = partitioning.PjitPartitioner(
+    self.partitioner = partitioning.PjitPartitioner(
         num_partitions=1, use_cpu_pjit=True)
-    train_state_initializer = utils.TrainStateInitializer(
-        optimizer_def=model.optimizer_def,
-        init_fn=model.get_initial_variables,
-        input_shapes={k: v.shape for k, v in input_data.items()},
-        partitioner=partitioner)
-    train_state = train_state_initializer.from_scratch(jax.random.PRNGKey(0))
+    self.train_state_initializer = utils.TrainStateInitializer(
+        optimizer_def=self.model.optimizer_def,
+        init_fn=self.model.get_initial_variables,
+        input_shapes={k: v.shape for k, v in self.input_data.items()},
+        partitioner=self.partitioner)
+    self.train_state = self.train_state_initializer.from_scratch(
+        jax.random.PRNGKey(0))
 
+  def test_image_encoder_text_decoder_train(self):
     trainer = trainer_lib.Trainer(
-        model,
-        train_state=train_state,
-        partitioner=partitioner,
+        self.model,
+        train_state=self.train_state,
+        partitioner=self.partitioner,
         eval_names=[],
         summary_dir=None,
-        train_state_axes=train_state_initializer.train_state_axes,
+        train_state_axes=self.train_state_initializer.train_state_axes,
         rng=jax.random.PRNGKey(0),
         learning_rate_fn=lambda x: 0.001,
         num_microbatches=1)
 
     trainer.train(
-        batch_iter=iter([input_data]),
+        batch_iter=iter([self.input_data]),
         num_steps=1)
 
-    predictions = model.predict_batch(
-        params=train_state.params,
-        batch=input_data)
-    self.assertSequenceEqual(predictions.shape, [2, 3])
+  def test_image_encoder_text_decoder_predict(self):
+    predictions = self.model.predict_batch(
+        params=self.train_state.params,
+        batch=self.input_data)
+    self.assertSequenceEqual(predictions.shape, [8, 3])
 
 if __name__ == "__main__":
   absltest.main()

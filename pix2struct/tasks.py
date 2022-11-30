@@ -74,7 +74,6 @@ def add_pix2struct_task(
     if not tf.io.gfile.glob(v):
       print(f"[{name}] No files matching {v}."
             "Must run data preprocessing first to use this task.")
-      return
 
   seqio.TaskRegistry.add(
       name=name,
