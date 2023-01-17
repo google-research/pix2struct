@@ -35,11 +35,6 @@ flags.DEFINE_string(
     None,
     "Directory containing the images referenced in refexp data.")
 
-flags.DEFINE_string(
-    "processed_dir",
-    None,
-    "Sub-directory containing the refexp processed data.")
-
 flags.DEFINE_integer(
     "num_negative_samples",
     5,
@@ -92,7 +87,12 @@ class ProcessSplit(beam.PTransform):
       image = self.get_image(image_id)
     except (IndexError, tf.errors.NotFoundError):
       return
-    num_negative_samples = flags.FLAGS.num_negative_samples if flags.FLAGS.num_negative_samples and self._split == "train" else num_candidates
+
+    if flags.FLAGS.num_negative_samples and self._split == "train":
+      num_negative_samples = flags.FLAGS.num_negative_samples
+    else:
+      num_negative_samples = num_candidates
+
     candidates = list(cand for cand in range(num_candidates) if cand != label)
     random.shuffle(candidates)
     candidates = candidates[:num_negative_samples] + [label]
@@ -125,9 +125,9 @@ class ProcessSplit(beam.PTransform):
     raw_dataset = tf.data.TFRecordDataset([data_path])
     # get a unique id per record
     raw_dataset = raw_dataset.enumerate(start=0)
+    output_path = os.path.join(
+        self._data_dir, "processed", f"{self._split}.tfr")
 
-    output_path = os.path.join(self._data_dir, flags.FLAGS.processed_dir,
-                               f"{self._split}.tfr")
     return (root
             | "Create" >> beam.Create(raw_dataset)
             | "Convert" >> beam.FlatMapTuple(self.convert_to_tf_examples)

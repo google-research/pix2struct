@@ -46,7 +46,7 @@ For the remaining documentation we will assume that GCP project information is
 in the following environment variables:
 
 ```
-export GCP_PROJECT=<your_project>
+export GCP_PROJECT=<your_project_id>
 export GCP_REGION=<your_region>
 ```
 
