@@ -387,16 +387,17 @@ file under `configs/sizes` is set to be consistent with the checkpoint.
 
 ## Inference
 
-We provide two ways of performing inference can be run on CPU. For testing and
-demoing purposes, these may be run on CPU. In that case, please set the
-`JAX_PLATFORMS` environment variable to `cpu`.
+We provide two ways of performing inference. For testing and demoing purposes,
+these may be run on CPU. In that case, please set the `JAX_PLATFORMS`
+environment variable to `cpu`.
 
 ### Command-line example
 
 We provide a minimal script for performing inference on a single example. This
-path has only been test at extremely small scale is not meant for larger-scale
-inference. For large-scale, we recommend setting a custom task with dummy labels
-and running the evaluation script (`t5x.eval`) as documented above.
+path has only been tested at extremely small scale and is not meant for
+larger-scale inference. For large-scale inference, we recommend setting a custom
+task with dummy labels and running the evaluation script (`t5x.eval`) as
+documented above.
 
 In the following example, we show the command for predicting the caption of an
 image using a base-sized checkpoint finetuned on the TextCaps task. For a task
@@ -417,13 +418,13 @@ python -m pix2struct.example_inference \
   --image=$HOME/test_image.jpg
 ```
 
-## Web Demo
+### Web Demo
 
 For a more user-friendly demo, we also provide a web-based alternative of
 inference script above. While running this command, the web demo can be accessed
 at `localhost:8080` (or any port specified via the `port` flag), assuming you
 are running the demo locally. You can then upload your custom image and optional
-prompt instead of specifying in via the command line.
+prompt instead of specifying it via the command line.
 
 ```
 python -m pix2struct.demo \
