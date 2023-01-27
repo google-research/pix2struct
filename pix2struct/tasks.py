@@ -14,8 +14,10 @@
 
 """Pix2Struct tasks."""
 import functools
+import io
 import os
 from typing import Any, Callable, List, Optional
+import PIL.Image
 from pix2struct import metrics
 from pix2struct import postprocessors
 from pix2struct import preprocessors
@@ -86,17 +88,27 @@ def add_pix2struct_task(
       metric_fns=metric_fns or [metrics.pix2struct_metrics])
 
 
-# MNIST dataset for debugging.
-add_pix2struct_task(
-    name="mnist",
-    base_dir=os.environ["PIX2STRUCT_DIR"] + "/data",
-    train_file_pattern="mnist/train.tfr*",
-    valid_file_pattern="mnist/test.tfr*")
+# Dummy task to be used during demos.
+dummy_bytes = io.BytesIO()
+PIL.Image.new("RGB", size=(1, 1)).save(dummy_bytes, "png")
+dummy_dataset = tf.data.Dataset.from_tensors({
+    "image": dummy_bytes.getvalue(),
+    "parse": [""],
+    "id": "",
+    "group_id": "",
+})
+seqio.TaskRegistry.add(
+    name="dummy_pix2struct",
+    source=seqio.FunctionDataSource(
+        dataset_fn=lambda split, shuffle_files: dummy_dataset,
+        splits=("dummy",)),
+    preprocessors=PREPROCESSORS,
+    output_features=OUTPUT_FEATURES)
 
 # TextCaps dataset from https://textvqa.org/textcaps/.
 add_pix2struct_task(
     name="textcaps",
-    base_dir=os.environ["PIX2STRUCT_DIR"] + "/data",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
     train_file_pattern="textcaps/processed/train.tfr*",
     valid_file_pattern="textcaps/processed/val.tfr*",
     test_file_pattern="textcaps/processed/test.tfr*")
@@ -104,7 +116,7 @@ add_pix2struct_task(
 # Screen2Words dataset.
 add_pix2struct_task(
     name="screen2words",
-    base_dir=os.environ["PIX2STRUCT_DIR"] + "/data",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
     train_file_pattern="screen2words/processed/train.tfr*",
     valid_file_pattern="screen2words/processed/dev.tfr*",
     test_file_pattern="screen2words/processed/test.tfr*",
@@ -113,28 +125,28 @@ add_pix2struct_task(
 # DocVQA (https://arxiv.org/abs/2007.00398).
 add_pix2struct_task(
     name="docvqa",
-    base_dir=os.environ["PIX2STRUCT_DIR"] + "/data",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
     train_file_pattern="docvqa/processed/train.tfr*",
     valid_file_pattern="docvqa/processed/val.tfr*",
     test_file_pattern="docvqa/processed/test.tfr*")
 
 add_pix2struct_task(
     name="infographicvqa",
-    base_dir=os.environ["PIX2STRUCT_DIR"] + "/data",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
     train_file_pattern="infographicvqa/processed/train.tfr*",
     valid_file_pattern="infographicvqa/processed/val.tfr*",
     test_file_pattern="infographicvqa/processed/test.tfr*")
 
 add_pix2struct_task(
     name="ocrvqa",
-    base_dir=os.environ["PIX2STRUCT_DIR"] + "/data",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
     train_file_pattern="ocrvqa/processed/train.tfr*",
     valid_file_pattern="ocrvqa/processed/val.tfr*",
     test_file_pattern="ocrvqa/processed/test.tfr*")
 
 add_pix2struct_task(
     name="refexp",
-    base_dir=os.environ["PIX2STRUCT_DIR"] + "/data",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
     train_file_pattern="refexp/processed/train.tfr*",
     valid_file_pattern="refexp/processed/val.tfr*",
     test_file_pattern="refexp/processed/test.tfr*",
@@ -148,21 +160,21 @@ add_pix2struct_task(
 
 add_pix2struct_task(
     name="widget_captioning",
-    base_dir=os.environ["PIX2STRUCT_DIR"] + "/data",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
     train_file_pattern="widget_captioning/processed/train.tfr*",
     valid_file_pattern="widget_captioning/processed/val.tfr*",
     test_file_pattern="widget_captioning/processed/test.tfr*")
 
 add_pix2struct_task(
     name="chartqa_augmented",
-    base_dir=os.environ["PIX2STRUCT_DIR"] + "/data",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
     train_file_pattern="chartqa/processed_augmented/train.tfr*",
     valid_file_pattern="chartqa/processed_augmented/val.tfr*",
     test_file_pattern="chartqa/processed_augmented/test.tfr*")
 
 add_pix2struct_task(
     name="chartqa_human",
-    base_dir=os.environ["PIX2STRUCT_DIR"] + "/data",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
     train_file_pattern="chartqa/processed_human/train.tfr*",
     valid_file_pattern="chartqa/processed_human/val.tfr*",
     test_file_pattern="chartqa/processed_human/test.tfr*")
@@ -174,7 +186,7 @@ seqio.MixtureRegistry.add(
 
 add_pix2struct_task(
     name="ai2d",
-    base_dir=os.environ["PIX2STRUCT_DIR"] + "/data",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
     train_file_pattern="ai2d/processed/train.tfr*",
     valid_file_pattern="ai2d/processed/val.tfr*",
     test_file_pattern="ai2d/processed/test.tfr*")

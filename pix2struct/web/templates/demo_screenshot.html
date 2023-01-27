@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Pix2Struct Demo</title>
+    <link rel="stylesheet" href="https://www.gstatic.com/external_hosted/material_design_lite/mdl_css-blue-pink-bundle.css"/>
+    <script defer src="https://www.gstatic.com/external_hosted/material_design_lite/mdl_all_js_compiled.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans:+400,500,700"/>
+    <link rel="stylesheet" href="static/style.css"/>
+  </head>
+  <body style="color: #5f6368;font-family: 'Google Sans'";>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">
+            Pix2Struct Demo
+          </span>
+        </div>
+      </header>
+      <main class="mdl-layout__content" style="padding: 20px;">
+        <div class="mdl-card mdl-shadow--2dp" style="width: 100%; padding: 20px; margin-bottom: 50px;">
+          Please upload an image with some text (e.g. web screenshot, document page, etc.) and maybe write a question if this server is hosting a VQA model.
+          <form enctype="multipart/form-data" method="post">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 650px;">
+              <input class="mdl-textfield__input" name="image" type="file" accept="image/*">
+            </div>
+            <br>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 650px;">
+              <input class="mdl-textfield__input" type="text" name="question" value="{{ question }}"/>
+              <label class="mdl-textfield__label" for="input_text">Question</label>
+            </div>
+            <br>
+            <input type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" value="Submit"/>
+          </form>
+          <div class="mdl-card" style="width:100%">
+            <table class="pix2struct-table">
+              <tr>
+                <th>Image</th>
+                <th>Prediction</th>
+              </tr>
+              <tr>
+                <td class="pix2struct-cell">
+                  <img class="pix2struct-image" src="data:image/png;base64,{{image}}" alt="">
+                </td>
+                <td class="pix2struct-cell">
+                  {{prediction}}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

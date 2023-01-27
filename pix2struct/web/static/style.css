@@ -1,0 +1,16 @@
+.pix2struct-table {
+  word-wrap: break-word;
+  border-collapse: separate;
+  border-spacing: 20px;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.pix2struct-cell {
+  vertical-align:top;
+}
+
+.pix2struct-image {
+  border: 1px solid #000000;
+  max-width: 100%;
+}

@@ -363,6 +363,80 @@ python -m t5x.eval \
   --gin.BATCH_SIZE=32
 ```
 
+## Finetuned Checkpoints
+In addition to the pretrained checkpoints released and specified in the
+`configs/init` directory. We also release checkpoints for the finetuned models
+on all tasks below.
+
+| Task             | GCS Path (Base)                                               | GCS Path (Large)                                               |
+| -----------------| ------------------------------------------------------------- | -------------------------------------------------------------- |
+| TextCaps         | `gs://pix2struct-data/textcaps_base/checkpoint_280400`          | `gs://pix2struct-data/textcaps_large/checkpoint_280400`          |
+| ChartQA          | `gs://pix2struct-data/chartqa_base/checkpoint_287600`           | `gs://pix2struct-data/charqa_large/checkpoint_182600`            |
+| WidgetCaptioning | `gs://pix2struct-data/widget_captioning_base/checkpoint_281600` | `gs://pix2struct-data/widget_captioning_large/checkpoint_181600` |
+| Screen2Words     | `gs://pix2struct-data/screen2words_base/checkpoint_282600`      | `gs://pix2struct-data/screen2words_large/checkpoint_183000`      |
+| RefExp           | `gs://pix2struct-data/refexp_base/checkpoint_290000`            | `gs://pix2struct-data/refexp_large/checkpoint_187800`            |
+| DocVQA           | `gs://pix2struct-data/docvqa_base/checkpoint_284400`            | `gs://pix2struct-data/docvqa_large/checkpoint_184000`            |
+| InfographicVQA   | `gs://pix2struct-data/infographicvqa_base/checkpoint_284000`    | `gs://pix2struct-data/infographicvqa_large/checkpoint_182000`    |
+| OCR-VQA          | `gs://pix2struct-data/ocrvqa_base/checkpoint_290000`            | `gs://pix2struct-data/ocrvqa_large/checkpoint_188400`           |
+| AI2D             | `gs://pix2struct-data/ai2d_base/checkpoint_284400`              | `gs://pix2struct-data/ai2d_large/checkpoint_184000`              |
+
+These checkpoints are compatible with the eval command documented above and the
+two ways of performing inference mentioned below. Please ensure that the config
+file under `configs/sizes` is set to be consistent with the checkpoint.
+
+
+## Inference
+
+We provide two ways of performing inference can be run on CPU. For testing and
+demoing purposes, these may be run on CPU. In that case, please set the
+`JAX_PLATFORMS` environment variable to `cpu`.
+
+### Command-line example
+
+We provide a minimal script for performing inference on a single example. This
+path has only been test at extremely small scale is not meant for larger-scale
+inference. For large-scale, we recommend setting a custom task with dummy labels
+and running the evaluation script (`t5x.eval`) as documented above.
+
+In the following example, we show the command for predicting the caption of an
+image using a base-sized checkpoint finetuned on the TextCaps task. For a task
+that also accepts textual prompts such as questions in VQA, you can also supply
+the question via the `text` flag (in addition to specifying the image with the
+`image` flag).
+
+```
+python -m pix2struct.example_inference \
+  --gin_search_paths="pix2struct/configs" \
+  --gin_file=models/pix2struct.gin \
+  --gin_file=runs/inference.gin \
+  --gin_file=sizes/base.gin \
+  --gin.MIXTURE_OR_TASK_NAME="'dummy_pix2struct'" \
+  --gin.TASK_FEATURE_LENGTHS="{'inputs': 2048, 'targets': 128}" \
+  --gin.BATCH_SIZE=1 \
+  --gin.CHECKPOINT_PATH="'gs://pix2struct-data/textcaps_base/checkpoint_280400'" \
+  --image=$HOME/test_image.jpg
+```
+
+## Web Demo
+
+For a more user-friendly demo, we also provide a web-based alternative of
+inference script above. While running this command, the web demo can be accessed
+at `localhost:8080` (or any port specified via the `port` flag), assuming you
+are running the demo locally. You can then upload your custom image and optional
+prompt instead of specifying in via the command line.
+
+```
+python -m pix2struct.demo \
+  --gin_search_paths="pix2struct/configs" \
+  --gin_file=models/pix2struct.gin \
+  --gin_file=runs/inference.gin \
+  --gin_file=sizes/base.gin \
+  --gin.MIXTURE_OR_TASK_NAME="'dummy_pix2struct'" \
+  --gin.TASK_FEATURE_LENGTHS="{'inputs': 2048, 'targets': 128}" \
+  --gin.BATCH_SIZE=1 \
+  --gin.CHECKPOINT_PATH="'gs://pix2struct-data/textcaps_base/checkpoint_280400'"
+```
+
 ## Clean up
 When you are done with your TPU VM, remember to delete the instance:
 

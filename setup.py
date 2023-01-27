@@ -27,6 +27,8 @@ setuptools.setup(
             "flaxformer @ git+https://github.com/google/flaxformer",
             "pycocoevalcap",
             "apache-beam[gcp]",
+            "jinja2",
+            "tornado==3.2.2",
         ],
     },
 )
