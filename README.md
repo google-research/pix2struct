@@ -17,7 +17,7 @@ git clone https://github.com/google-research/pix2struct.git
 cd pix2struct
 conda create -n pix2struct python=3.9
 conda activate pix2struct
-pip install -e .[dev] -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
+pip install -e ."[dev]" -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
 pytest
 ```
 
