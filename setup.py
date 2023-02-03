@@ -19,6 +19,7 @@ setuptools.setup(
     name="pix2struct",
     version="0.0.1",
     packages=setuptools.find_packages(),
+    package_data={"": ["web/**/*.css", "web/**/*.html", "configs/**/*.gin"]},
     extras_require={
         "dev": [
             "pytest",
