@@ -111,18 +111,18 @@ def render_text(text: str,
                 right_padding: int = 5,
                 top_padding: int = 5,
                 bottom_padding: int = 5,
-                font_path: str = DEFAULT_FONT_PATH) -> Image.Image:
+                font_bytes: Optional[bytes] = None) -> Image.Image:
   """Render text."""
   # Add new lines so that each line is no more than 80 characters.
   wrapper = textwrap.TextWrapper(width=80)
   lines = wrapper.wrap(text=text)
   wrapped_text = "\n".join(lines)
 
-  if tf.io.gfile.exists(font_path):
-    with tf.io.gfile.GFile(font_path, "rb") as font_file:
-      font = ImageFont.truetype(font_file, encoding="UTF-8", size=text_size)
+  if font_bytes is not None:
+    font_spec = io.BytesIO(font_bytes)
   else:
-    font = ImageFont.truetype(font_path, encoding="UTF-8", size=text_size)
+    font_spec = DEFAULT_FONT_PATH
+  font = ImageFont.truetype(font_spec, encoding="UTF-8", size=text_size)
 
   # Use a temporary canvas to determine the width and height in pixels when
   # rendering the text.
