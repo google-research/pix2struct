@@ -39,10 +39,16 @@ def transfer_warmup_cosine_decay_schedule(
     warmup_steps: int,
     start_step: int,
     end_step: int,
-    end_value: float = 0.0
+    end_value: float = 0.0,
+    cycle_length_ratio: float = 1.0,
 ) -> optax.Schedule:
   """Warmup cosine decay schedule with offset."""
   assert end_step >= start_step
+
+  # Optionally adjust cycle length to overshoot the actually number of steps in
+  # order to not stop at exactly 0. See https://arxiv.org/abs/2203.15556.
+  decay_steps = int((end_step - start_step) * cycle_length_ratio)
+
   schedules = [
       optax.linear_schedule(
           init_value=0,
@@ -52,7 +58,7 @@ def transfer_warmup_cosine_decay_schedule(
           init_value=0,
           peak_value=peak_value,
           warmup_steps=warmup_steps,
-          decay_steps=end_step - start_step,
+          decay_steps=decay_steps,
           end_value=end_value)]
   return optax.join_schedules(schedules, [start_step])
 
