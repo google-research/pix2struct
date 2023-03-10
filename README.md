@@ -370,7 +370,7 @@ on all tasks below.
 
 | Task             | GCS Path (Base)                                               | GCS Path (Large)                                               |
 | -----------------| ------------------------------------------------------------- | -------------------------------------------------------------- |
-| TextCaps         | `gs://pix2struct-data/textcaps_base/checkpoint_280400`          | `gs://pix2struct-data/textcaps_large/checkpoint_280400`          |
+| TextCaps         | `gs://pix2struct-data/textcaps_base/checkpoint_280400`          | `gs://pix2struct-data/textcaps_large/checkpoint_180600`          |
 | ChartQA          | `gs://pix2struct-data/chartqa_base/checkpoint_287600`           | `gs://pix2struct-data/charqa_large/checkpoint_182600`            |
 | WidgetCaptioning | `gs://pix2struct-data/widget_captioning_base/checkpoint_281600` | `gs://pix2struct-data/widget_captioning_large/checkpoint_181600` |
 | Screen2Words     | `gs://pix2struct-data/screen2words_base/checkpoint_282600`      | `gs://pix2struct-data/screen2words_large/checkpoint_183000`      |
