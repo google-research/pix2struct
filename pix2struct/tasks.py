@@ -145,27 +145,6 @@ add_pix2struct_task(
     test_file_pattern="ocrvqa/processed/test.tfr*")
 
 add_pix2struct_task(
-    name="refexp",
-    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
-    train_file_pattern="refexp/processed/train.tfr*",
-    valid_file_pattern="refexp/processed/val.tfr*",
-    test_file_pattern="refexp/processed/test.tfr*",
-    metric_fns=[functools.partial(
-        metrics.instance_ranking_metrics,
-        group_fn=lambda t: t["group_id"],
-        correct_fn=lambda t: t["parse"][0] == "true",
-        ranking_fn=lambda p, s: (p == "true", s * (1 if p == "true" else -1))
-    )],
-    postprocess_fn=postprocessors.group_target)
-
-add_pix2struct_task(
-    name="widget_captioning",
-    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
-    train_file_pattern="widget_captioning/processed/train.tfr*",
-    valid_file_pattern="widget_captioning/processed/val.tfr*",
-    test_file_pattern="widget_captioning/processed/test.tfr*")
-
-add_pix2struct_task(
     name="chartqa_augmented",
     base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
     train_file_pattern="chartqa/processed_augmented/train.tfr*",
@@ -190,3 +169,24 @@ add_pix2struct_task(
     train_file_pattern="ai2d/processed/train.tfr*",
     valid_file_pattern="ai2d/processed/val.tfr*",
     test_file_pattern="ai2d/processed/test.tfr*")
+
+add_pix2struct_task(
+    name="refexp",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
+    train_file_pattern="refexp/processed/train.tfr*",
+    valid_file_pattern="refexp/processed/val.tfr*",
+    test_file_pattern="refexp/processed/test.tfr*",
+    metric_fns=[functools.partial(
+        metrics.instance_ranking_metrics,
+        group_fn=lambda t: t["group_id"],
+        correct_fn=lambda t: t["parse"][0] == "true",
+        ranking_fn=lambda p, s: (p == "true", s * (1 if p == "true" else -1))
+    )],
+    postprocess_fn=postprocessors.group_target)
+
+add_pix2struct_task(
+    name="widget_captioning",
+    base_dir=os.environ.get("PIX2STRUCT_DIR", "") + "/data",
+    train_file_pattern="widget_captioning/processed/train.tfr*",
+    valid_file_pattern="widget_captioning/processed/val.tfr*",
+    test_file_pattern="widget_captioning/processed/test.tfr*")

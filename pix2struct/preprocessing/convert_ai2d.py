@@ -61,20 +61,20 @@ def convert(input_path: str, data_dir: str) -> Iterable[tf.train.Example]:
 
     # The `image_id` field is only used to ensure correct splitting of the data.
     preprocessing_utils.add_text_feature(example, "image_id", data["imageName"])
-    answers = " ".join(f"({string.ascii_lowercase[i]}) {a}"
-                       for i, a in enumerate(v["answerTexts"]))
+    options = " ".join(
+        f"({string.ascii_lowercase[i]}) {a}"
+        for i, a in enumerate(v["answerTexts"])
+    )
 
     image_with_header = preprocessing_utils.render_header(
         image=image_with_placeholders if v["abcLabel"] else image,
-        header=f"{k} {answers}")
+        header=f"{k} {options}",
+    )
     preprocessing_utils.add_bytes_feature(
-        example,
-        "image",
-        preprocessing_utils.image_to_bytes(image_with_header))
-    preprocessing_utils.add_text_feature(
-        example,
-        "parse",
-        v["answerTexts"][v["correctAnswer"]])
+        example, "image", preprocessing_utils.image_to_bytes(image_with_header)
+    )
+    parse = v["answerTexts"][v["correctAnswer"]]
+    preprocessing_utils.add_text_feature(example, "parse", parse)
     yield example
 
 

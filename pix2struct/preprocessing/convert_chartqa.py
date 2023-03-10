@@ -38,51 +38,64 @@ class ProcessSplit(beam.PTransform):
     self._data_dir = flags.FLAGS.data_dir
     self._version = version
 
-  def convert_to_tf_examples(self, example_id,
-                             json_example) -> tf.train.Example:
+  def convert_to_tf_examples(
+      self, example_id, json_example
+  ) -> tf.train.Example:
     with tf.io.gfile.GFile(
-        os.path.join(self._data_dir, self._split, "png",
-                     json_example["imgname"]), "rb") as f:
+        os.path.join(
+            self._data_dir, self._split, "png", json_example["imgname"]
+        ),
+        "rb",
+    ) as f:
       image = Image.open(f)
 
     tf_example = tf.train.Example()
     image_with_question = preprocessing_utils.render_header(
-        image, json_example["query"])
+        image, json_example["query"]
+    )
     preprocessing_utils.add_bytes_feature(
-        tf_example, "image",
-        preprocessing_utils.image_to_bytes(image_with_question))
+        tf_example,
+        "image",
+        preprocessing_utils.image_to_bytes(image_with_question),
+    )
     preprocessing_utils.add_text_feature(
-        tf_example, "id", f"{self._split}_{self._version}_{example_id}")
-    preprocessing_utils.add_text_feature(tf_example, "parse",
-                                         json_example["label"])
+        tf_example, "id", f"{self._split}_{self._version}_{example_id}"
+    )
+    parse = json_example["label"]
+    preprocessing_utils.add_text_feature(tf_example, "parse", parse)
     return tf_example
 
   def expand(self, root):
     assert self._version in ("human", "augmented")
-    data_path = os.path.join(self._data_dir, self._split,
-                             f"{self._split}_{self._version}.json")
+    data_path = os.path.join(
+        self._data_dir, self._split, f"{self._split}_{self._version}.json"
+    )
     with tf.io.gfile.GFile(data_path) as data_file:
       data = json.load(data_file)
 
-    output_path = os.path.join(self._data_dir, f"processed_{self._version}",
-                               f"{self._split}.tfr")
-    return (root
-            | "Create" >> beam.Create(enumerate(data))
-            | "Convert" >> beam.MapTuple(self.convert_to_tf_examples)
-            | "Shuffle" >> beam.Reshuffle()
-            | "Write" >> beam.io.WriteToTFRecord(
-                output_path,
-                coder=beam.coders.ProtoCoder(tf.train.Example)))
+    output_path = os.path.join(
+        self._data_dir, f"processed_{self._version}", f"{self._split}.tfr"
+    )
+    return (
+        root
+        | "Create" >> beam.Create(enumerate(data))
+        | "Convert" >> beam.MapTuple(self.convert_to_tf_examples)
+        | "Shuffle" >> beam.Reshuffle()
+        | "Write"
+        >> beam.io.WriteToTFRecord(
+            output_path, coder=beam.coders.ProtoCoder(tf.train.Example)
+        )
+    )
 
 
 def pipeline(root):
-  _ = (root | "ProcessTrainHuman" >> ProcessSplit("train", "human"))
-  _ = (root | "ProcessValHuman" >> ProcessSplit("val", "human"))
-  _ = (root | "ProcessTestHuman" >> ProcessSplit("test", "human"))
+  _ = root | "ProcessTrainHuman" >> ProcessSplit("train", "human")
+  _ = root | "ProcessValHuman" >> ProcessSplit("val", "human")
+  _ = root | "ProcessTestHuman" >> ProcessSplit("test", "human")
 
-  _ = (root | "ProcessTrainAugmented" >> ProcessSplit("train", "augmented"))
-  _ = (root | "ProcessValAugmented" >> ProcessSplit("val", "augmented"))
-  _ = (root | "ProcessTestAugmented" >> ProcessSplit("test", "augmented"))
+  _ = root | "ProcessTrainAugmented" >> ProcessSplit("train", "augmented")
+  _ = root | "ProcessValAugmented" >> ProcessSplit("val", "augmented")
+  _ = root | "ProcessTestAugmented" >> ProcessSplit("test", "augmented")
 
 
 def main(argv):

@@ -76,8 +76,8 @@ class ProcessSplit(beam.PTransform):
         preprocessing_utils.image_to_bytes(image_with_question))
     preprocessing_utils.add_text_feature(
         tf_example, "id", str(json_example["questionId"]))
-    for answer in json_example["answers"]:
-      preprocessing_utils.add_text_feature(tf_example, "parse", answer)
+    for parse in json_example["answers"]:
+      preprocessing_utils.add_text_feature(tf_example, "parse", parse)
     self._processed_counter.inc()
     yield tf_example
 

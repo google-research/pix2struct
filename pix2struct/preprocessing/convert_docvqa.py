@@ -52,20 +52,25 @@ class ProcessSplit(beam.PTransform):
 
     tf_example = tf.train.Example()
     image_with_question = preprocessing_utils.render_header(
-        image, json_example["question"])
+        image, json_example["question"]
+    )
     preprocessing_utils.add_bytes_feature(
-        tf_example, "image",
-        preprocessing_utils.image_to_bytes(image_with_question))
+        tf_example,
+        "image",
+        preprocessing_utils.image_to_bytes(image_with_question),
+    )
     preprocessing_utils.add_text_feature(
-        tf_example, "id", str(json_example["questionId"]))
+        tf_example, "id", str(json_example["questionId"])
+    )
     # "N/A" parse for the test set where the answers are not available
-    for answer in json_example.get("answers", ["N/A"]):
-      preprocessing_utils.add_text_feature(tf_example, "parse", answer)
+    for parse in json_example.get("answers", ["N/A"]):
+      preprocessing_utils.add_text_feature(tf_example, "parse", parse)
     return tf_example
 
   def expand(self, root):
     data_path = os.path.join(
-        self._data_dir, self._split, f"{self._split}_v1.0.json")
+        self._data_dir, self._split, f"{self._split}_v1.0.json"
+    )
     with tf.io.gfile.GFile(data_path) as data_file:
       data = json.load(data_file)
     assert data["dataset_name"] in ("docvqa", "infographicVQA")
