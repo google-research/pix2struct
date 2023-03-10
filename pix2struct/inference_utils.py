@@ -68,7 +68,7 @@ def get_inference_fns(
             dataset_fn=lambda split, shuffle_files: dataset,
             splits=["tmp"]),
         output_features=task.output_features,
-        preprocessors=task.preprocessors)
+        preprocessors=task.preprocessors)  # pytype: disable=attribute-error  # always-use-return-annotations
     temp_dataset = _task_to_dataset(temp_task)
     temp_dataset = temp_dataset.batch(batch_size)
     return temp_dataset.as_numpy_iterator()
