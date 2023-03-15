@@ -47,7 +47,7 @@ def get_inference_fns(
       k: (batch_size,) + spec.shape for k, spec in
       _task_to_dataset(task).element_spec.items()
   }
-  train_state_initializer = utils.TrainStateInitializer(
+  train_state_initializer = utils.TrainStateInitializer(  # pytype: disable=wrong-arg-types  # jax-array
       optimizer_def=None,
       init_fn=model.get_initial_variables,
       input_shapes=input_shapes,
