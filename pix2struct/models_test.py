@@ -48,8 +48,7 @@ class ModelsTest(absltest.TestCase):
         "decoder_input_tokens": np.ones(shape=(8, 3), dtype=np.int32),
         "decoder_target_tokens": np.ones(shape=(8, 3), dtype=np.int32)
     }
-    self.partitioner = partitioning.PjitPartitioner(
-        num_partitions=1, use_cpu_pjit=True)
+    self.partitioner = partitioning.PjitPartitioner(num_partitions=1)
     self.train_state_initializer = utils.TrainStateInitializer(
         optimizer_def=self.model.optimizer_def,
         init_fn=self.model.get_initial_variables,
