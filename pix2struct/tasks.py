@@ -1,4 +1,4 @@
-# Copyright 2022 The pix2struct Authors.
+# Copyright 2023 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -88,22 +88,24 @@ def add_pix2struct_task(
       metric_fns=metric_fns or [metrics.pix2struct_metrics])
 
 
-# Dummy task to be used during demos.
-dummy_bytes = io.BytesIO()
-PIL.Image.new("RGB", size=(1, 1)).save(dummy_bytes, "png")
-dummy_dataset = tf.data.Dataset.from_tensors({
-    "image": dummy_bytes.getvalue(),
+# Placeholder task to be used during demos.
+placeholder_bytes = io.BytesIO()
+PIL.Image.new("RGB", size=(1, 1)).save(placeholder_bytes, "png")
+placeholder_dataset = tf.data.Dataset.from_tensors({
+    "image": placeholder_bytes.getvalue(),
     "parse": [""],
     "id": "",
     "group_id": "",
 })
 seqio.TaskRegistry.add(
-    name="dummy_pix2struct",
+    name="placeholder_pix2struct",
     source=seqio.FunctionDataSource(
-        dataset_fn=lambda split, shuffle_files: dummy_dataset,
-        splits=("dummy",)),
+        dataset_fn=lambda split, shuffle_files: placeholder_dataset,
+        splits=("placeholder",),
+    ),
     preprocessors=PREPROCESSORS,
-    output_features=OUTPUT_FEATURES)
+    output_features=OUTPUT_FEATURES,
+)
 
 # TextCaps dataset from https://textvqa.org/textcaps/.
 add_pix2struct_task(

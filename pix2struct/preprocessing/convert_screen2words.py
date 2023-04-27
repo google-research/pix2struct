@@ -1,4 +1,4 @@
-# Copyright 2022 The pix2struct Authors.
+# Copyright 2023 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,12 +53,12 @@ class ProcessSplit(beam.PTransform):
   def convert_to_tf_examples(
       self,
       screen_id: str,
-      summaries_and_dummy: Tuple[Iterable[str], Iterable[bool]]
-      ) -> Iterable[tf.train.Example]:
+      summaries_and_placeholder: Tuple[Iterable[str], Iterable[bool]],
+  ) -> Iterable[tf.train.Example]:
     """Convert the results of joining examples and splits to TF examples."""
-    summaries, dummy = summaries_and_dummy
+    summaries, placeholder = summaries_and_placeholder
     # Only yield examples if there was a non-empty join with the intended split.
-    if any(dummy):
+    if any(placeholder):
       example = tf.train.Example()
       preprocessing_utils.add_bytes_feature(
           example, "image", self.get_image(screen_id))

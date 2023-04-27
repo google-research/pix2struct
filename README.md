@@ -396,7 +396,7 @@ environment variable to `cpu`.
 We provide a minimal script for performing inference on a single example. This
 path has only been tested at extremely small scale and is not meant for
 larger-scale inference. For large-scale inference, we recommend setting a custom
-task with dummy labels and running the evaluation script (`t5x.eval`) as
+task with placeholder labels and running the evaluation script (`t5x.eval`) as
 documented above.
 
 In the following example, we show the command for predicting the caption of an
@@ -411,7 +411,7 @@ python -m pix2struct.example_inference \
   --gin_file=models/pix2struct.gin \
   --gin_file=runs/inference.gin \
   --gin_file=sizes/base.gin \
-  --gin.MIXTURE_OR_TASK_NAME="'dummy_pix2struct'" \
+  --gin.MIXTURE_OR_TASK_NAME="'placeholder_pix2struct'" \
   --gin.TASK_FEATURE_LENGTHS="{'inputs': 2048, 'targets': 128}" \
   --gin.BATCH_SIZE=1 \
   --gin.CHECKPOINT_PATH="'gs://pix2struct-data/textcaps_base/checkpoint_280400'" \
@@ -432,7 +432,7 @@ python -m pix2struct.demo \
   --gin_file=models/pix2struct.gin \
   --gin_file=runs/inference.gin \
   --gin_file=sizes/base.gin \
-  --gin.MIXTURE_OR_TASK_NAME="'dummy_pix2struct'" \
+  --gin.MIXTURE_OR_TASK_NAME="'placeholder_pix2struct'" \
   --gin.TASK_FEATURE_LENGTHS="{'inputs': 2048, 'targets': 128}" \
   --gin.BATCH_SIZE=1 \
   --gin.CHECKPOINT_PATH="'gs://pix2struct-data/textcaps_base/checkpoint_280400'"

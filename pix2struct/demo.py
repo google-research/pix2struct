@@ -1,4 +1,4 @@
-# Copyright 2022 The pix2struct Authors.
+# Copyright 2023 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -82,9 +82,9 @@ def main(_):
   demo_fn = get_demo_fns_using_gin()["predict"]
 
   print("Warming up demo function...")
-  dummy_bytes = io.BytesIO()
-  PIL.Image.new("RGB", size=(1, 1)).save(dummy_bytes, "png")
-  demo_utils.apply_single_inference(demo_fn, dummy_bytes.getvalue())
+  placeholder_bytes = io.BytesIO()
+  PIL.Image.new("RGB", size=(1, 1)).save(placeholder_bytes, "png")
+  demo_utils.apply_single_inference(demo_fn, placeholder_bytes.getvalue())
   print("Done warming up demo function.")
 
   web_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "web")
