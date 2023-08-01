@@ -15,6 +15,7 @@
 """Inference utils."""
 
 from typing import Any, Callable, Dict, Iterable, Mapping
+import jax
 import seqio
 from t5x import models
 from t5x import partitioning
@@ -73,15 +74,18 @@ def get_inference_fns(
     temp_dataset = temp_dataset.batch(batch_size)
     return temp_dataset.as_numpy_iterator()
 
+  predict_batch_jit = jax.jit(model.predict_batch)
+  score_batch_jit = jax.jit(model.score_batch)
+
   vocabulary = task.output_features["targets"].vocabulary
   def _predict(dataset: tf.data.Dataset) -> Iterable[str]:
     for batch in _dataset_to_batches(dataset):
-      for token_ids in model.predict_batch(train_state.params, batch):
+      for token_ids in predict_batch_jit(train_state.params, batch):
         yield vocabulary.decode(token_ids)
 
   def _intermediates(dataset: tf.data.Dataset) -> Iterable[Any]:
     for batch in _dataset_to_batches(dataset):
-      _, intermediates = model.score_batch(
+      _, intermediates = score_batch_jit(
           train_state.params, batch, return_intermediates=True)
       yield batch, intermediates
 
