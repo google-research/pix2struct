@@ -28,6 +28,8 @@ import tensorflow as tf
 
 DEFAULT_FONT_PATH = "arial.ttf"
 
+IMAGE = Image.Image
+
 
 def add_int_feature(example: tf.train.Example,
                     key: str,
@@ -78,13 +80,13 @@ def deterministic_sample(items: Iterable[Any], value_fn) -> Any:
   return max(items, key=lambda x: get_hash(value_fn(x)))
 
 
-def image_to_bytes(image: Image.Image) -> bytes:
+def image_to_bytes(image: IMAGE) -> bytes:
   img_byte_arr = io.BytesIO()
   image.save(img_byte_arr, format="PNG")
   return img_byte_arr.getvalue()
 
 
-def render_header(image: Image.Image, header: str) -> Image.Image:
+def render_header(image: IMAGE, header: str) -> IMAGE:
   """Renders a header on a PIL image and returns a new PIL image."""
   header_image = render_text(header)
   new_width = max(header_image.width, image.width)
@@ -111,13 +113,16 @@ def render_text(text: str,
                 right_padding: int = 5,
                 top_padding: int = 5,
                 bottom_padding: int = 5,
-                font_bytes: Optional[bytes] = None) -> Image.Image:
+                font_bytes: Optional[bytes] = None,
+                use_wrapper: bool = True) -> IMAGE:
   """Render text."""
   # Add new lines so that each line is no more than 80 characters.
-  wrapper = textwrap.TextWrapper(width=80)
-  lines = wrapper.wrap(text=text)
-  wrapped_text = "\n".join(lines)
-
+  if use_wrapper:
+    wrapper = textwrap.TextWrapper(width=80)
+    lines = wrapper.wrap(text=text)
+    wrapped_text = "\n".join(lines)
+  else:
+    wrapped_text = text
   if font_bytes is not None:
     font_spec = io.BytesIO(font_bytes)
   else:
@@ -145,7 +150,7 @@ def render_text(text: str,
 def render_text_on_bounding_box(
     text: str,
     bounding_box: Iterable[Iterable[int]],
-    image: Image.Image):
+    image: IMAGE):
   """Render text on top of a specific bounding box."""
   draw = ImageDraw.Draw(image)
   (x0, y0), (x1, y1) = bounding_box
