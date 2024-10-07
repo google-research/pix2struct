@@ -1,4 +1,4 @@
-# Copyright 2023 The pix2struct Authors.
+# Copyright 2024 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -155,7 +155,7 @@ def render_text_on_bounding_box(
   def _can_increment_font(ratio=0.95):
     next_font = ImageFont.truetype(
         DEFAULT_FONT_PATH, encoding="UTF-8", size=fontsize + 1)
-    width, height = next_font.getsize(text)
+    width, height = next_font.getsize(text)  # pytype: disable=attribute-error  # pillow-102-upgrade
     return width < ratio * (x1 - x0) and height < ratio * (y1 - y0)
 
   while _can_increment_font():
