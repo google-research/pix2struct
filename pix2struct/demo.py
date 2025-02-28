@@ -61,6 +61,8 @@ class ScreenshotHandler(tornado.web.RequestHandler):
           question=self.get_argument("question", default=""),
           image_bytes=image_bytes,
       )
+      if self._demo_fn is None:
+        raise ValueError("self._demo_fn is None")
       prediction = html.escape(
           demo_utils.apply_single_inference(self._demo_fn, image_bytes)
       )
@@ -68,6 +70,8 @@ class ScreenshotHandler(tornado.web.RequestHandler):
     else:
       prediction = ""
       image = ""
+    if self._tmpl is None:
+      raise ValueError("self._tmpl is None")
     self.write(self._tmpl.render(
         image=image,
         prediction=prediction))
