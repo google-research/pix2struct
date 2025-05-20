@@ -130,8 +130,8 @@ def render_text(text: str,
   _, _, text_width, text_height = temp_draw.textbbox((0, 0), wrapped_text, font)
 
   # Create the actual image with a bit of padding around the text.
-  image_width = text_width + left_padding + right_padding
-  image_height = text_height + top_padding + bottom_padding
+  image_width = int(text_width + left_padding + right_padding)
+  image_height = int(text_height + top_padding + bottom_padding)
   image = Image.new("RGB", (image_width, image_height), background_color)
   draw = ImageDraw.Draw(image)
   draw.text(
