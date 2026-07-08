@@ -1,4 +1,4 @@
-# Copyright 2025 The pix2struct Authors.
+# Copyright 2026 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ class ModelsTest(absltest.TestCase):
         summary_dir=None,
         train_state_axes=self.train_state_initializer.train_state_axes,  # pytype: disable=attribute-error  # jax-api-types
         rng=jax.random.PRNGKey(0),
-        learning_rate_fn=lambda x: 0.001,
+        learning_rate_fn=lambda x: 0.001,  # pyrefly: ignore[bad-argument-type]
         num_microbatches=1)
 
     trainer.train(

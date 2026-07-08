@@ -1,4 +1,4 @@
-# Copyright 2025 The pix2struct Authors.
+# Copyright 2026 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -106,9 +106,9 @@ class PreprocessorsTest(tf.test.TestCase):
         key="inputs",
         patch_size=(1, 1))
     sequence_length = {"inputs": 7}
-    dataset = tf.data.Dataset.from_tensors({"inputs": random_image})
+    dataset = tf.data.Dataset.from_tensors({"inputs": random_image})  # pyrefly: ignore[bad-argument-type]
     dataset = preprocessor(dataset, sequence_length=sequence_length)
-    np.set_printoptions(threshold=np.inf)
+    np.set_printoptions(threshold=np.inf)  # pyrefly: ignore[bad-argument-type]
     print(list(dataset.as_numpy_iterator()))
 
 if __name__ == "__main__":

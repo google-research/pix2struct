@@ -1,4 +1,4 @@
-# Copyright 2025 The pix2struct Authors.
+# Copyright 2026 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ class TransferRestoreCheckpointConfig(utils.RestoreCheckpointConfig):
     super().__post_init__()
     if self.steps is not None:
       assert self.mode == "specific"
-      self.path = os.path.join(self.path, f"checkpoint_{self.steps}")
+      self.path = os.path.join(self.path, f"checkpoint_{self.steps}")  # pyrefly: ignore[no-matching-overload]
 
 
 def transfer_warmup_cosine_decay_schedule(
@@ -64,5 +64,5 @@ def transfer_warmup_cosine_decay_schedule(
 
 
 @gin.configurable
-def add(a: int = gin.REQUIRED, b: int = gin.REQUIRED):
+def add(a: int = gin.REQUIRED, b: int = gin.REQUIRED):  # pyrefly: ignore[bad-function-definition]
   return a + b

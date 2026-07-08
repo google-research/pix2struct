@@ -1,4 +1,4 @@
-# Copyright 2025 The pix2struct Authors.
+# Copyright 2026 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -122,7 +122,7 @@ class ProcessSplit(beam.PTransform):
   def expand(self, root):
     data_path = os.path.join(
         self._data_dir, f"{self._split}.tfrecord")
-    raw_dataset = tf.data.TFRecordDataset([data_path])
+    raw_dataset = tf.data.TFRecordDataset([data_path])  # pyrefly: ignore[bad-instantiation]
     # get a unique id per record
     raw_dataset = raw_dataset.enumerate(start=0)
     output_path = os.path.join(

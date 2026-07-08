@@ -1,4 +1,4 @@
-# Copyright 2025 The pix2struct Authors.
+# Copyright 2026 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,12 +49,12 @@ class ScreenshotHandler(tornado.web.RequestHandler):
                  env=None,
                  demo_fn=None):
     self._demo_fn = demo_fn
-    self._tmpl = env.get_template("demo_screenshot.html")
+    self._tmpl = env.get_template("demo_screenshot.html")  # pyrefly: ignore[missing-attribute]
 
-  def get(self):
+  def get(self):  # pyrefly: ignore[bad-override]
     self.post()
 
-  def post(self):
+  def post(self):  # pyrefly: ignore[bad-override]
     if "image" in self.request.files:
       image_bytes = self.request.files["image"][0]["body"]
       image_bytes = demo_utils.maybe_add_question(

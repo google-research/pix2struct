@@ -1,4 +1,4 @@
-# Copyright 2025 The pix2struct Authors.
+# Copyright 2026 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,6 +38,6 @@ def apply_single_inference(
     inference_fn: Callable[[tf.data.Dataset], Iterable[Any]], image_bytes: bytes
 ) -> Any:
   dataset = tf.data.Dataset.from_tensors(
-      {"id": "", "group_id": "", "image": image_bytes, "parse": [""]}
+      {"id": "", "group_id": "", "image": image_bytes, "parse": [""]}  # pyrefly: ignore[bad-argument-type]
   )
   return next(iter(inference_fn(dataset)))

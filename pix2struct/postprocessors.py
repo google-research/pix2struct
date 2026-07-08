@@ -1,4 +1,4 @@
-# Copyright 2025 The pix2struct Authors.
+# Copyright 2026 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@ import tensorflow as tf
 
 def multi_target(output, example=None, is_target=False):
   if is_target:
-    return [tf.compat.as_text(p) for p in example["parse"]]
+    return [tf.compat.as_text(p) for p in example["parse"]]  # pyrefly: ignore[unsupported-operation]
   return output
 
 
 def group_target(output, example=None, is_target=False):
   if is_target:
     return {
-        "group_id": tf.compat.as_text(example["group_id"]),
-        "parse": [tf.compat.as_text(p) for p in example["parse"]]
+        "group_id": tf.compat.as_text(example["group_id"]),  # pyrefly: ignore[unsupported-operation]
+        "parse": [tf.compat.as_text(p) for p in example["parse"]]  # pyrefly: ignore[unsupported-operation]
     }
   return output

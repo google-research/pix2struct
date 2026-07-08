@@ -1,4 +1,4 @@
-# Copyright 2025 The pix2struct Authors.
+# Copyright 2026 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ def get_inference_fns(
   }
   train_state_initializer = utils.TrainStateInitializer(  # pytype: disable=wrong-arg-types  # jax-array
       optimizer_def=None,
-      init_fn=model.get_initial_variables,
+      init_fn=model.get_initial_variables,  # pyrefly: ignore[bad-argument-type]
       input_shapes=input_shapes,
       partitioner=partitioner)
   restore_checkpoint_cfg = utils.RestoreCheckpointConfig(
@@ -66,7 +66,7 @@ def get_inference_fns(
     temp_task = seqio.Task(
         name="tmp",
         source=seqio.FunctionDataSource(
-            dataset_fn=lambda split, shuffle_files: dataset,
+            dataset_fn=lambda split, shuffle_files: dataset,  # pyrefly: ignore[bad-argument-type]
             splits=["tmp"]),
         output_features=task.output_features,
         preprocessors=task.preprocessors)  # pytype: disable=attribute-error  # always-use-return-annotations

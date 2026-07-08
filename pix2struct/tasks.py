@@ -1,4 +1,4 @@
-# Copyright 2025 The pix2struct Authors.
+# Copyright 2026 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import seqio
 import tensorflow as tf
 
 OUTPUT_FEATURES = dict(
-    inputs=seqio.ContinuousFeature(rank=2, dtype=tf.float32),
+    inputs=seqio.ContinuousFeature(rank=2, dtype=tf.float32),  # pyrefly: ignore[unexpected-keyword]
     targets=seqio.Feature(
         vocabulary=seqio.SentencePieceVocabulary(
             "gs://pix2struct-data/sentencepiece.model")))
@@ -74,7 +74,7 @@ def add_pix2struct_task(
 
   seqio.TaskRegistry.add(
       name=name,
-      source=seqio.TFExampleDataSource(
+      source=seqio.TFExampleDataSource(  # pyrefly: ignore[bad-argument-type]
           split_to_filepattern=split_to_filepattern,
           feature_description=FEATURE_DESCRIPTION),
       preprocessors=PREPROCESSORS,
@@ -86,7 +86,7 @@ def add_pix2struct_task(
 # Placeholder task to be used during demos.
 placeholder_bytes = io.BytesIO()
 PIL.Image.new("RGB", size=(1, 1)).save(placeholder_bytes, "png")
-placeholder_dataset = tf.data.Dataset.from_tensors({
+placeholder_dataset = tf.data.Dataset.from_tensors({  # pyrefly: ignore[bad-argument-type]
     "image": placeholder_bytes.getvalue(),
     "parse": [""],
     "id": "",
@@ -94,8 +94,8 @@ placeholder_dataset = tf.data.Dataset.from_tensors({
 })
 seqio.TaskRegistry.add(
     name="placeholder_pix2struct",
-    source=seqio.FunctionDataSource(
-        dataset_fn=lambda split, shuffle_files: placeholder_dataset,
+    source=seqio.FunctionDataSource(  # pyrefly: ignore[bad-argument-type]
+        dataset_fn=lambda split, shuffle_files: placeholder_dataset,  # pyrefly: ignore[bad-argument-type]
         splits=("placeholder",),
     ),
     preprocessors=PREPROCESSORS,
@@ -173,7 +173,7 @@ add_pix2struct_task(
     train_file_pattern="refexp/processed/train.tfr*",
     valid_file_pattern="refexp/processed/val.tfr*",
     test_file_pattern="refexp/processed/test.tfr*",
-    metric_fns=[functools.partial(
+    metric_fns=[functools.partial(  # pyrefly: ignore[bad-argument-type]
         metrics.instance_ranking_metrics,
         group_fn=lambda t: t["group_id"],
         correct_fn=lambda t: t["parse"][0] == "true",

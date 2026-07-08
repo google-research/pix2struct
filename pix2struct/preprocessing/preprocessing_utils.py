@@ -1,4 +1,4 @@
-# Copyright 2025 The pix2struct Authors.
+# Copyright 2026 The pix2struct Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -208,7 +208,7 @@ class SplitAndWriteTFRecords(beam.PTransform):
     if self._is_test is not None and self._is_test(key_feature):
       return 2
     else:
-      return int(get_hash(key_feature) % 100 < self._validation_percent)
+      return int(get_hash(key_feature) % 100 < self._validation_percent)  # pyrefly: ignore[unsupported-operation]
 
   def expand(self, pcoll):
     train, val, test = (pcoll
