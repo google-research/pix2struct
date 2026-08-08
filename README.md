@@ -68,7 +68,7 @@ rm train_val_images.zip
 unzip test_images.zip
 rm test_images.zip
 cd ..
-gsutil -m cp -r textcaps_data $PIX2STRUCT_DIR/data/textcaps
+gcloud storage cp --recursive textcaps_data $PIX2STRUCT_DIR/data/textcaps
 python -m pix2struct.preprocessing.convert_textcaps \
   --textcaps_dir=$PIX2STRUCT_DIR/data/textcaps \
   --output_dir=$PIX2STRUCT_DIR/data/textcaps/processed \
@@ -90,7 +90,7 @@ git clone https://github.com/vis-nlp/ChartQA.git
 cp -r ChartQA/ChartQA\ Dataset/* ./
 rm -rf ChartQA
 cd ..
-gsutil -m cp -r chartqa $PIX2STRUCT_DIR/data/chartqa
+gcloud storage cp --recursive chartqa $PIX2STRUCT_DIR/data/chartqa
 python -m pix2struct.preprocessing.convert_chartqa \
   --data_dir=$PIX2STRUCT_DIR/data/chartqa \
   -- \
@@ -113,7 +113,7 @@ cd data
 wget https://storage.googleapis.com/crowdstf-rico-uiuc-4540/rico_dataset_v0.1/unique_uis.tar.gz
 tar xvfz unique_uis.tar.gz
 rm unique_uis.tar.gz
-gsutil -m cp -r combined $PIX2STRUCT_DIR/data/rico_images
+gcloud storage cp --recursive combined $PIX2STRUCT_DIR/data/rico_images
 ```
 
 ## Widget Captioning
@@ -128,7 +128,7 @@ cp widget-caption/split/*.txt ./
 mv dev.txt val.txt
 rm -rf widget-caption
 cd ..
-gsutil -m cp -r widget_captioning $PIX2STRUCT_DIR/data/widget_captioning
+gcloud storage cp --recursive widget_captioning $PIX2STRUCT_DIR/data/widget_captioning
 python -m pix2struct.preprocessing.convert_widget_captioning \
   --data_dir=$PIX2STRUCT_DIR/data/widget_captioning \
   --image_dir=$PIX2STRUCT_DIR/data/rico_images \
@@ -148,7 +148,7 @@ If you haven't already setup RICO, please do so before you proceed.
 ```
 cd data
 git clone https://github.com/google-research-datasets/screen2words.git
-gsutil -m cp -r screen2words $PIX2STRUCT_DIR/data/screen2words
+gcloud storage cp --recursive screen2words $PIX2STRUCT_DIR/data/screen2words
 python -m pix2struct.preprocessing.convert_screen2words \
   --screen2words_dir=$PIX2STRUCT_DIR/data/screen2words \
   --rico_dir=$PIX2STRUCT_DIR/data/rico_images \
@@ -173,7 +173,7 @@ wget https://github.com/google-research-datasets/uibert/raw/main/ref_exp/dev.tfr
 wget https://github.com/google-research-datasets/uibert/raw/main/ref_exp/test.tfrecord
 mv dev.tfrecord val.tfrecord
 cd ..
-gsutil -m cp -r refexp $PIX2STRUCT_DIR/data/refexp
+gcloud storage cp --recursive refexp $PIX2STRUCT_DIR/data/refexp
 python -m pix2struct.preprocessing.convert_refexp \
   --data_dir=$PIX2STRUCT_DIR/data/refexp \
   --image_dir=$PIX2STRUCT_DIR/data/rico_images \
@@ -204,7 +204,7 @@ tar xvf test.tar.gz
 rm -r *.tar.gz */ocr_results
 
 cd ..
-gsutil -m cp -r docvqa $PIX2STRUCT_DIR/data/docvqa
+gcloud storage cp --recursive docvqa $PIX2STRUCT_DIR/data/docvqa
 python -m pix2struct.preprocessing.convert_docvqa \
   --data_dir=$PIX2STRUCT_DIR/data/docvqa \
   -- \
@@ -236,7 +236,7 @@ done
 rm *.zip
 
 cd ..
-gsutil -m cp -r infographicvqa $PIX2STRUCT_DIR/data/infographicvqa
+gcloud storage cp --recursive infographicvqa $PIX2STRUCT_DIR/data/infographicvqa
 python -m pix2struct.preprocessing.convert_docvqa \
   --data_dir=$PIX2STRUCT_DIR/data/infographicvqa \
   -- \
@@ -261,7 +261,7 @@ assume that `data/ocrvqa` contains a directory called `images` and a file called
 
 ```
 cd ..
-gsutil -m cp -r ocrvqa $PIX2STRUCT_DIR/data/ocrvqa
+gcloud storage cp --recursive ocrvqa $PIX2STRUCT_DIR/data/ocrvqa
 python -m pix2struct.preprocessing.convert_ocrvqa \
   --data_dir=$PIX2STRUCT_DIR/data/ocrvqa \
   -- \
@@ -281,7 +281,7 @@ cd data/
 wget https://ai2-public-datasets.s3.amazonaws.com/diagrams/ai2d-all.zip
 unzip ai2d-all.zip
 rm ai2d-all.zip
-gsutil -m cp -r ai2d $PIX2STRUCT_DIR/data/ai2d
+gcloud storage cp --recursive ai2d $PIX2STRUCT_DIR/data/ai2d
 python -m pix2struct.preprocessing.convert_ai2d \
   --data_dir=$PIX2STRUCT_DIR/data/ai2d \
   --test_ids_path=gs://pix2struct-data/ai2d_test_ids.csv \
