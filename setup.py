@@ -29,7 +29,7 @@ setuptools.setup(
             "pycocoevalcap",
             "apache-beam[gcp]",
             "jinja2",
-            "tornado==3.2.2",
+            "tornado==6.5.8",
         ],
     },
 )
