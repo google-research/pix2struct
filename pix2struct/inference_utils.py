@@ -48,7 +48,7 @@ def get_inference_fns(
       k: (batch_size,) + spec.shape for k, spec in
       _task_to_dataset(task).element_spec.items()
   }
-  train_state_initializer = utils.TrainStateInitializer(  # pytype: disable=wrong-arg-types  # jax-array
+  train_state_initializer = utils.TrainStateInitializer(
       optimizer_def=None,
       init_fn=model.get_initial_variables,  # pyrefly: ignore[bad-argument-type]
       input_shapes=input_shapes,
@@ -69,7 +69,7 @@ def get_inference_fns(
             dataset_fn=lambda split, shuffle_files: dataset,  # pyrefly: ignore[bad-argument-type]
             splits=["tmp"]),
         output_features=task.output_features,
-        preprocessors=task.preprocessors)  # pytype: disable=attribute-error  # always-use-return-annotations
+        preprocessors=task.preprocessors)
     temp_dataset = _task_to_dataset(temp_task)
     temp_dataset = temp_dataset.batch(batch_size)
     return temp_dataset.as_numpy_iterator()

@@ -122,7 +122,7 @@ class ProcessSplit(beam.PTransform):
   def expand(self, root):
     data_path = os.path.join(
         self._data_dir, f"{self._split}.tfrecord")
-    raw_dataset = tf.data.TFRecordDataset([data_path])  # pyrefly: ignore[bad-instantiation]
+    raw_dataset = tf.data.TFRecordDataset([data_path])
     # get a unique id per record
     raw_dataset = raw_dataset.enumerate(start=0)
     output_path = os.path.join(

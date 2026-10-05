@@ -106,7 +106,7 @@ class PreprocessorsTest(tf.test.TestCase):
         key="inputs",
         patch_size=(1, 1))
     sequence_length = {"inputs": 7}
-    dataset = tf.data.Dataset.from_tensors({"inputs": random_image})  # pyrefly: ignore[bad-argument-type]
+    dataset = tf.data.Dataset.from_tensors({"inputs": random_image})
     dataset = preprocessor(dataset, sequence_length=sequence_length)
     np.set_printoptions(threshold=np.inf)  # pyrefly: ignore[bad-argument-type]
     print(list(dataset.as_numpy_iterator()))

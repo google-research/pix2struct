@@ -155,7 +155,7 @@ def render_text_on_bounding_box(
   def _can_increment_font(ratio=0.95):
     next_font = ImageFont.truetype(
         DEFAULT_FONT_PATH, encoding="UTF-8", size=fontsize + 1)
-    width, height = next_font.getsize(text)  # pytype: disable=attribute-error  # pillow-102-upgrade
+    width, height = next_font.getsize(text)  # pyrefly: ignore[missing-attribute]
     return width < ratio * (x1 - x0) and height < ratio * (y1 - y0)
 
   while _can_increment_font():

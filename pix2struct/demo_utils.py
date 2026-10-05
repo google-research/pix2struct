@@ -38,6 +38,6 @@ def apply_single_inference(
     inference_fn: Callable[[tf.data.Dataset], Iterable[Any]], image_bytes: bytes
 ) -> Any:
   dataset = tf.data.Dataset.from_tensors(
-      {"id": "", "group_id": "", "image": image_bytes, "parse": [""]}  # pyrefly: ignore[bad-argument-type]
+      {"id": "", "group_id": "", "image": image_bytes, "parse": [""]}
   )
   return next(iter(inference_fn(dataset)))

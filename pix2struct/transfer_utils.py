@@ -64,5 +64,5 @@ def transfer_warmup_cosine_decay_schedule(
 
 
 @gin.configurable
-def add(a: int = gin.REQUIRED, b: int = gin.REQUIRED):  # pyrefly: ignore[bad-function-definition]
+def add(a: int = gin.REQUIRED, b: int = gin.REQUIRED):
   return a + b

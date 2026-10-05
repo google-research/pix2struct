@@ -86,7 +86,7 @@ def add_pix2struct_task(
 # Placeholder task to be used during demos.
 placeholder_bytes = io.BytesIO()
 PIL.Image.new("RGB", size=(1, 1)).save(placeholder_bytes, "png")
-placeholder_dataset = tf.data.Dataset.from_tensors({  # pyrefly: ignore[bad-argument-type]
+placeholder_dataset = tf.data.Dataset.from_tensors({
     "image": placeholder_bytes.getvalue(),
     "parse": [""],
     "id": "",

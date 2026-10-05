@@ -64,7 +64,7 @@ class ModelsTest(absltest.TestCase):
         partitioner=self.partitioner,
         eval_names=[],
         summary_dir=None,
-        train_state_axes=self.train_state_initializer.train_state_axes,  # pytype: disable=attribute-error  # jax-api-types
+        train_state_axes=self.train_state_initializer.train_state_axes,
         rng=jax.random.PRNGKey(0),
         learning_rate_fn=lambda x: 0.001,  # pyrefly: ignore[bad-argument-type]
         num_microbatches=1)
